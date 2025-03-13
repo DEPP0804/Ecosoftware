@@ -65,6 +65,7 @@ class _LoginPageState extends State<LoginPage>
       );
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setBool('isBiometricEnabled', true); // Guardar indicador
+      Navigator.pushReplacementNamed(context, '/home'); // Navegar a la página de inicio
     } on FirebaseAuthException catch (e) {
       setState(() {
         errorMessage = e.message;

@@ -18,6 +18,12 @@ const TextStyle headingStyle = TextStyle(
   color: Colors.white,
 );
 
+const TextStyle headingStyle2 = TextStyle(
+  fontSize: 24,
+  fontWeight: FontWeight.bold,
+  color: defaultColor,
+);
+
 const TextStyle subHeadingStyle = TextStyle(
   fontSize: 18,
   color: textColor,

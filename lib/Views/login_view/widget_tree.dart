@@ -1,4 +1,4 @@
-import 'package:ecosoftware/Views/login_view/home_page.dart';
+import 'package:ecosoftware/Views/home_page.dart';
 import 'package:ecosoftware/Views/login_view/login_register_page.dart';
 import 'package:ecosoftware/controllers/auth_controller.dart';
 import 'package:flutter/material.dart';

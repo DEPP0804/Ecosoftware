@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ecosoftware/styles/app_styles.dart'; // Para kDefaultPadding y AppTheme
-import 'dart:math'; // Necesario para cálculos si se usan potencias, etc. (Aunque no para interés simple)
+//import 'dart:math'; // Necesario para cálculos si se usan potencias, etc. (Aunque no para interés simple)
 
 class InteresSimplePage extends StatefulWidget {
   // Hacer el constructor const si es posible
@@ -39,22 +39,47 @@ class _InteresSimplePageState extends State<InteresSimplePage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Concepto:', style: textTheme.titleMedium?.copyWith(color: colorScheme.primary)), // Resaltar título de sección
+                    Text(
+                      'Concepto:',
+                      style: textTheme.titleMedium?.copyWith(
+                        color: colorScheme.primary,
+                      ),
+                    ), // Resaltar título de sección
                     const SizedBox(height: kDefaultPadding / 2),
                     Text(
                       'El interés simple se calcula únicamente sobre el capital inicial (principal) durante todo el período del préstamo o inversión. No se capitaliza, lo que significa que el interés ganado en cada período no se añade al capital para calcular el interés del siguiente período.',
-                      style: textTheme.bodyMedium, // Usar estilo base para cuerpo
+                      style:
+                          textTheme.bodyMedium, // Usar estilo base para cuerpo
                       textAlign: TextAlign.justify,
                     ),
                     const SizedBox(height: kDefaultPadding),
-                    Text('Fórmulas Principales:', style: textTheme.titleMedium?.copyWith(color: colorScheme.primary)),
+                    Text(
+                      'Fórmulas Principales:',
+                      style: textTheme.titleMedium?.copyWith(
+                        color: colorScheme.primary,
+                      ),
+                    ),
                     const SizedBox(height: kDefaultPadding / 2),
                     _buildFormulaText('Interés (I) = C × i × t', textTheme),
-                    _buildFormulaText('Monto Total (M ó VF) = C × (1 + i × t)', textTheme),
+                    _buildFormulaText(
+                      'Monto Total (M ó VF) = C × (1 + i × t)',
+                      textTheme,
+                    ),
                     const SizedBox(height: kDefaultPadding),
-                    Text('Despejes Comunes:', style: textTheme.titleSmall?.copyWith(color: colorScheme.secondary)), // Usar título más pequeño
-                    _buildFormulaText('Capital (C ó VP) = I / (i × t)', textTheme),
-                    _buildFormulaText('Capital (C ó VP) = VF / (1 + i × t)', textTheme),
+                    Text(
+                      'Despejes Comunes:',
+                      style: textTheme.titleSmall?.copyWith(
+                        color: colorScheme.secondary,
+                      ),
+                    ), // Usar título más pequeño
+                    _buildFormulaText(
+                      'Capital (C ó VP) = I / (i × t)',
+                      textTheme,
+                    ),
+                    _buildFormulaText(
+                      'Capital (C ó VP) = VF / (1 + i × t)',
+                      textTheme,
+                    ),
                     _buildFormulaText('Tasa (i) = I / (C × t)', textTheme),
                     _buildFormulaText('Tiempo (t) = I / (C × i)', textTheme),
                   ],
@@ -63,26 +88,37 @@ class _InteresSimplePageState extends State<InteresSimplePage> {
             ),
             const SizedBox(height: kDefaultPadding),
             // Ejemplo (dentro de otra Card)
-             Card(
-               child: Padding(
-                 padding: const EdgeInsets.all(kDefaultPadding),
-                 child: Column(
-                   crossAxisAlignment: CrossAxisAlignment.start,
-                   children: [
-                     Text('Ejemplo:', style: textTheme.titleMedium?.copyWith(color: colorScheme.primary)),
-                     const SizedBox(height: kDefaultPadding / 2),
-                     Text(
-                       'Si inviertes \$1,000 (C) a una tasa de interés anual del 5% (i = 0.05) durante 3 años (t = 3):',
-                       style: textTheme.bodyMedium,
-                       textAlign: TextAlign.justify,
-                     ),
-                      const SizedBox(height: kDefaultPadding / 2),
-                     _buildFormulaText('Interés (I) = 1000 × 0.05 × 3 = \$150', textTheme),
-                     _buildFormulaText('Monto Total (M) = 1000 + 150 = \$1150', textTheme),
-                   ],
-                 ),
-               ),
-             ),
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(kDefaultPadding),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Ejemplo:',
+                      style: textTheme.titleMedium?.copyWith(
+                        color: colorScheme.primary,
+                      ),
+                    ),
+                    const SizedBox(height: kDefaultPadding / 2),
+                    Text(
+                      'Si inviertes \$1,000 (C) a una tasa de interés anual del 5% (i = 0.05) durante 3 años (t = 3):',
+                      style: textTheme.bodyMedium,
+                      textAlign: TextAlign.justify,
+                    ),
+                    const SizedBox(height: kDefaultPadding / 2),
+                    _buildFormulaText(
+                      'Interés (I) = 1000 × 0.05 × 3 = \$150',
+                      textTheme,
+                    ),
+                    _buildFormulaText(
+                      'Monto Total (M) = 1000 + 150 = \$1150',
+                      textTheme,
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
       ),
@@ -101,7 +137,12 @@ class _InteresSimplePageState extends State<InteresSimplePage> {
   Widget _buildFormulaText(String text, TextTheme textTheme) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: kDefaultPadding / 4),
-      child: Center(child: Text(text, style: textTheme.bodyMedium?.copyWith(fontStyle: FontStyle.italic))),
+      child: Center(
+        child: Text(
+          text,
+          style: textTheme.bodyMedium?.copyWith(fontStyle: FontStyle.italic),
+        ),
+      ),
     );
   }
 
@@ -124,11 +165,14 @@ class _InteresSimplePageState extends State<InteresSimplePage> {
       context: context,
       // Evitar cerrar el diálogo tocando fuera si se está calculando algo
       // barrierDismissible: !_isLoading, // Necesitarías manejar _isLoading aquí
-      builder: (dialogContext) { // Usar dialogContext
+      builder: (dialogContext) {
+        // Usar dialogContext
         // StatefulBuilder para manejar el estado del Dropdown dentro del Dialog
         return StatefulBuilder(
           builder: (context, setDialogState) {
-            final theme = Theme.of(dialogContext); // Usar tema del contexto del diálogo
+            final theme = Theme.of(
+              dialogContext,
+            ); // Usar tema del contexto del diálogo
 
             // Función de cálculo interna del diálogo
             void _calcularDialogo() {
@@ -141,142 +185,245 @@ class _InteresSimplePageState extends State<InteresSimplePage> {
                 double tDias = double.tryParse(timeDaysController.text) ?? 0;
 
                 // Validaciones de entradas
-                if ((selectedVariable == 'I' || selectedVariable == 't' || selectedVariable == 'i') && c == null) {
-                   _showErrorSnackBar(dialogContext, 'Ingrese el Principal (C).'); return;
+                if ((selectedVariable == 'I' ||
+                        selectedVariable == 't' ||
+                        selectedVariable == 'i') &&
+                    c == null) {
+                  _showErrorSnackBar(
+                    dialogContext,
+                    'Ingrese el Principal (C).',
+                  );
+                  return;
                 }
-                if ((selectedVariable == 'I' || selectedVariable == 'C' || selectedVariable == 't') && iPorcentaje == null) {
-                   _showErrorSnackBar(dialogContext, 'Ingrese la Tasa de Interés (%).'); return;
+                if ((selectedVariable == 'I' ||
+                        selectedVariable == 'C' ||
+                        selectedVariable == 't') &&
+                    iPorcentaje == null) {
+                  _showErrorSnackBar(
+                    dialogContext,
+                    'Ingrese la Tasa de Interés (%).',
+                  );
+                  return;
                 }
-                 if ((selectedVariable == 'C' || selectedVariable == 'i' || selectedVariable == 't') && I == null) {
-                   _showErrorSnackBar(dialogContext, 'Ingrese el Interés Simple (I).'); return;
+                if ((selectedVariable == 'C' ||
+                        selectedVariable == 'i' ||
+                        selectedVariable == 't') &&
+                    I == null) {
+                  _showErrorSnackBar(
+                    dialogContext,
+                    'Ingrese el Interés Simple (I).',
+                  );
+                  return;
                 }
 
                 double iDecimal = (iPorcentaje ?? 0) / 100.0;
-                double tTotalAnos = tAnos + (tMeses / 12.0) + (tDias / 360.0); // Año comercial
+                double tTotalAnos =
+                    tAnos + (tMeses / 12.0) + (tDias / 360.0); // Año comercial
 
                 if (selectedVariable != 't' && tTotalAnos <= 0) {
-                   _showErrorSnackBar(dialogContext, 'El tiempo total debe ser positivo.'); return;
+                  _showErrorSnackBar(
+                    dialogContext,
+                    'El tiempo total debe ser positivo.',
+                  );
+                  return;
                 }
 
                 double resultado = 0;
 
                 try {
-                   switch (selectedVariable) {
-                     case 'I':
-                       if (c == null) throw Exception('Principal no válido'); // Ya validado arriba, pero por si acaso
-                       resultado = c * iDecimal * tTotalAnos;
-                       break;
-                     case 'C':
-                       if (I == null) throw Exception('Interés no válido');
-                       if (iDecimal <= 0 || tTotalAnos <= 0) throw Exception('Tasa o tiempo deben ser positivos para calcular C.');
-                       resultado = I / (iDecimal * tTotalAnos);
-                       break;
-                     case 'i':
-                       if (c == null || I == null) throw Exception('Principal o Interés no válidos');
-                       if (c <= 0 || tTotalAnos <= 0) throw Exception('Principal y tiempo deben ser positivos para calcular i.');
-                       resultado = (I / (c * tTotalAnos)) * 100; // Mostrar como %
-                       break;
-                     case 't':
-                       if (c == null || I == null) throw Exception('Principal o Interés no válidos');
-                       if (c <= 0 || iDecimal <= 0) throw Exception('Principal y tasa deben ser positivos para calcular t.');
-                       resultado = I / (c * iDecimal);
-                       break;
-                     default: throw Exception('Variable desconocida seleccionada.');
-                   }
+                  switch (selectedVariable) {
+                    case 'I':
+                      if (c == null)
+                        throw Exception(
+                          'Principal no válido',
+                        ); // Ya validado arriba, pero por si acaso
+                      resultado = c * iDecimal * tTotalAnos;
+                      break;
+                    case 'C':
+                      if (I == null) throw Exception('Interés no válido');
+                      if (iDecimal <= 0 || tTotalAnos <= 0)
+                        throw Exception(
+                          'Tasa o tiempo deben ser positivos para calcular C.',
+                        );
+                      resultado = I / (iDecimal * tTotalAnos);
+                      break;
+                    case 'i':
+                      if (c == null || I == null)
+                        throw Exception('Principal o Interés no válidos');
+                      if (c <= 0 || tTotalAnos <= 0)
+                        throw Exception(
+                          'Principal y tiempo deben ser positivos para calcular i.',
+                        );
+                      resultado =
+                          (I / (c * tTotalAnos)) * 100; // Mostrar como %
+                      break;
+                    case 't':
+                      if (c == null || I == null)
+                        throw Exception('Principal o Interés no válidos');
+                      if (c <= 0 || iDecimal <= 0)
+                        throw Exception(
+                          'Principal y tasa deben ser positivos para calcular t.',
+                        );
+                      resultado = I / (c * iDecimal);
+                      break;
+                    default:
+                      throw Exception('Variable desconocida seleccionada.');
+                  }
 
-                   // Actualizar el campo de resultado DENTRO del diálogo
-                   setDialogState(() {
-                      resultController.text = resultado.toStringAsFixed(2);
-                   });
+                  // Actualizar el campo de resultado DENTRO del diálogo
+                  setDialogState(() {
+                    resultController.text = resultado.toStringAsFixed(2);
+                  });
                 } catch (e) {
-                   _showErrorSnackBar(dialogContext, 'Error: ${e.toString().replaceFirst("Exception: ","")}');
+                  _showErrorSnackBar(
+                    dialogContext,
+                    'Error: ${e.toString().replaceFirst("Exception: ", "")}',
+                  );
                 }
               }
             }
 
-             // Función para limpiar campos del diálogo
-             void _limpiarDialogo() {
-                dialogFormKey.currentState?.reset();
-                principalController.clear();
-                rateController.clear();
-                interestController.clear();
-                timeYearsController.clear();
-                timeMonthsController.clear();
-                timeDaysController.clear();
-                resultController.clear();
-                setDialogState(() { selectedVariable = 'I'; }); // Resetear dropdown
-             }
-
+            // Función para limpiar campos del diálogo
+            void _limpiarDialogo() {
+              dialogFormKey.currentState?.reset();
+              principalController.clear();
+              rateController.clear();
+              interestController.clear();
+              timeYearsController.clear();
+              timeMonthsController.clear();
+              timeDaysController.clear();
+              resultController.clear();
+              setDialogState(() {
+                selectedVariable = 'I';
+              }); // Resetear dropdown
+            }
 
             // --- UI del AlertDialog ---
             return AlertDialog(
-              title: Text('Calculadora I. Simple', style: theme.textTheme.titleLarge?.copyWith(color: theme.colorScheme.primary)), // Usar estilo de tema
-              content: Form( // Envolver en Form
+              title: Text(
+                'Calculadora I. Simple',
+                style: theme.textTheme.titleLarge?.copyWith(
+                  color: theme.colorScheme.primary,
+                ),
+              ), // Usar estilo de tema
+              content: Form(
+                // Envolver en Form
                 key: dialogFormKey,
-                child: SingleChildScrollView( // Para evitar overflow
+                child: SingleChildScrollView(
+                  // Para evitar overflow
                   child: Column(
                     mainAxisSize: MainAxisSize.min, // Ajustar al contenido
                     children: [
                       DropdownButtonFormField<String>(
                         value: selectedVariable,
-                        items: const [ // Hacer const
-                          DropdownMenuItem(value: 'I', child: Text('Calcular Interés (I)')),
-                          DropdownMenuItem(value: 'C', child: Text('Calcular Principal (C)')),
-                          DropdownMenuItem(value: 'i', child: Text('Calcular Tasa (%)')),
-                          DropdownMenuItem(value: 't', child: Text('Calcular Tiempo (años)')),
+                        items: const [
+                          // Hacer const
+                          DropdownMenuItem(
+                            value: 'I',
+                            child: Text('Calcular Interés (I)'),
+                          ),
+                          DropdownMenuItem(
+                            value: 'C',
+                            child: Text('Calcular Principal (C)'),
+                          ),
+                          DropdownMenuItem(
+                            value: 'i',
+                            child: Text('Calcular Tasa (%)'),
+                          ),
+                          DropdownMenuItem(
+                            value: 't',
+                            child: Text('Calcular Tiempo (años)'),
+                          ),
                         ],
                         onChanged: (String? newValue) {
                           if (newValue != null) {
-                             // Usar setDialogState para actualizar la UI del diálogo
-                             setDialogState(() {
-                                selectedVariable = newValue;
-                                // Limpiar campos al cambiar para evitar confusiones
-                                _limpiarDialogo();
-                             });
+                            // Usar setDialogState para actualizar la UI del diálogo
+                            setDialogState(() {
+                              selectedVariable = newValue;
+                              // Limpiar campos al cambiar para evitar confusiones
+                              _limpiarDialogo();
+                            });
                           }
                         },
-                        decoration: const InputDecoration(labelText: 'Calcular Variable'), // Tema aplicado
+                        decoration: const InputDecoration(
+                          labelText: 'Calcular Variable',
+                        ), // Tema aplicado
                         validator: (v) => v == null ? 'Selecciona' : null,
                       ),
                       const SizedBox(height: kDefaultPadding),
 
                       // Campos condicionales
                       if (selectedVariable != 'C')
-                        _buildDialogTextField(controller: principalController, label: 'Principal (C)'),
+                        _buildDialogTextField(
+                          controller: principalController,
+                          label: 'Principal (C)',
+                        ),
                       if (selectedVariable != 'i')
-                        _buildDialogTextField(controller: rateController, label: 'Tasa Interés Anual (%)'),
+                        _buildDialogTextField(
+                          controller: rateController,
+                          label: 'Tasa Interés Anual (%)',
+                        ),
                       if (selectedVariable != 'I')
-                        _buildDialogTextField(controller: interestController, label: 'Interés Simple (I)'),
+                        _buildDialogTextField(
+                          controller: interestController,
+                          label: 'Interés Simple (I)',
+                        ),
                       if (selectedVariable != 't') ...[
-                          const SizedBox(height: kDefaultPadding / 2),
-                           Text('Tiempo:', style: theme.textTheme.bodySmall),
-                           Row(children: [
-                              Expanded(child: _buildDialogTextField(controller: timeYearsController, label: 'Años', hint: '0')),
-                              const SizedBox(width: kDefaultPadding / 2),
-                              Expanded(child: _buildDialogTextField(controller: timeMonthsController, label: 'Meses', hint: '0')),
-                              const SizedBox(width: kDefaultPadding / 2),
-                              Expanded(child: _buildDialogTextField(controller: timeDaysController, label: 'Días', hint: '0')),
-                           ]),
+                        const SizedBox(height: kDefaultPadding / 2),
+                        Text('Tiempo:', style: theme.textTheme.bodySmall),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: _buildDialogTextField(
+                                controller: timeYearsController,
+                                label: 'Años',
+                                hint: '0',
+                              ),
+                            ),
+                            const SizedBox(width: kDefaultPadding / 2),
+                            Expanded(
+                              child: _buildDialogTextField(
+                                controller: timeMonthsController,
+                                label: 'Meses',
+                                hint: '0',
+                              ),
+                            ),
+                            const SizedBox(width: kDefaultPadding / 2),
+                            Expanded(
+                              child: _buildDialogTextField(
+                                controller: timeDaysController,
+                                label: 'Días',
+                                hint: '0',
+                              ),
+                            ),
+                          ],
+                        ),
                       ],
 
                       const SizedBox(height: kDefaultPadding * 1.5),
-                       _buildDialogTextField(
-                          controller: resultController,
-                          label: 'Resultado ($selectedVariable)', // Label dinámico
-                          readOnly: true, // Campo de solo lectura
-                          labelColor: theme.colorScheme.primary, // Resaltar resultado
-                       ),
+                      _buildDialogTextField(
+                        controller: resultController,
+                        label:
+                            'Resultado ($selectedVariable)', // Label dinámico
+                        readOnly: true, // Campo de solo lectura
+                        labelColor:
+                            theme.colorScheme.primary, // Resaltar resultado
+                      ),
                     ],
                   ),
                 ),
               ),
               actions: <Widget>[
-                 TextButton(
-                    onPressed: _limpiarDialogo, // Botón Limpiar
-                    child: const Text('Limpiar'),
-                 ),
                 TextButton(
-                  onPressed: () => Navigator.of(dialogContext).pop(), // Usar dialogContext
+                  onPressed: _limpiarDialogo, // Botón Limpiar
+                  child: const Text('Limpiar'),
+                ),
+                TextButton(
+                  onPressed:
+                      () =>
+                          Navigator.of(
+                            dialogContext,
+                          ).pop(), // Usar dialogContext
                   child: const Text('Cerrar'),
                 ),
                 ElevatedButton(
@@ -289,58 +436,65 @@ class _InteresSimplePageState extends State<InteresSimplePage> {
         );
       },
     ).then((_) {
-        // Limpiar controladores del diálogo después de cerrarlo si es necesario,
-        // aunque al definirse dentro de la función, se deberían liberar.
-        // No es estrictamente necesario aquí.
+      // Limpiar controladores del diálogo después de cerrarlo si es necesario,
+      // aunque al definirse dentro de la función, se deberían liberar.
+      // No es estrictamente necesario aquí.
     });
   }
 
   // Helper para crear TextFormField dentro del diálogo (reutilizable)
   Widget _buildDialogTextField({
-      required TextEditingController controller,
-      required String label,
-      String? hint, // Placeholder opcional
-      bool readOnly = false,
-      Color? labelColor,
+    required TextEditingController controller,
+    required String label,
+    String? hint, // Placeholder opcional
+    bool readOnly = false,
+    Color? labelColor,
   }) {
-     return Padding(
-       padding: const EdgeInsets.symmetric(vertical: kDefaultPadding / 2),
-       child: TextFormField(
-          controller: controller,
-          keyboardType: const TextInputType.numberWithOptions(decimal: true), // Numérico siempre
-          readOnly: readOnly,
-          decoration: InputDecoration(
-             labelText: label,
-             hintText: hint, // Mostrar placeholder si se proporciona
-             labelStyle: labelColor != null ? TextStyle(color: labelColor) : null,
-             // Estilo del tema se aplica automáticamente
-             // Cambiar apariencia si es readonly
-             filled: readOnly,
-             fillColor: readOnly ? Theme.of(context).disabledColor.withOpacity(0.05) : null,
-          ),
-           validator: (value) {
-             if (!readOnly) { // Solo validar si no es de solo lectura
-                 if (value == null || value.isEmpty) {
-                    // Permitir 0 en tiempo, pero no en otros campos requeridos
-                    if (label.contains('Tiempo')) return null; // 0 es válido para tiempo
-                    return 'Requerido';
-                 }
-                 if (double.tryParse(value) == null) {
-                    return 'Inválido';
-                 }
-                 if (double.parse(value) < 0) {
-                    return 'Positivo'; // Requerir valores positivos
-                 }
-             }
-              return null;
-           },
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-       ),
-     );
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: kDefaultPadding / 2),
+      child: TextFormField(
+        controller: controller,
+        keyboardType: const TextInputType.numberWithOptions(
+          decimal: true,
+        ), // Numérico siempre
+        readOnly: readOnly,
+        decoration: InputDecoration(
+          labelText: label,
+          hintText: hint, // Mostrar placeholder si se proporciona
+          labelStyle: labelColor != null ? TextStyle(color: labelColor) : null,
+          // Estilo del tema se aplica automáticamente
+          // Cambiar apariencia si es readonly
+          filled: readOnly,
+          fillColor:
+              readOnly
+                  ? Theme.of(context).disabledColor.withOpacity(0.05)
+                  : null,
+        ),
+        validator: (value) {
+          if (!readOnly) {
+            // Solo validar si no es de solo lectura
+            if (value == null || value.isEmpty) {
+              // Permitir 0 en tiempo, pero no en otros campos requeridos
+              if (label.contains('Tiempo'))
+                return null; // 0 es válido para tiempo
+              return 'Requerido';
+            }
+            if (double.tryParse(value) == null) {
+              return 'Inválido';
+            }
+            if (double.parse(value) < 0) {
+              return 'Positivo'; // Requerir valores positivos
+            }
+          }
+          return null;
+        },
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+      ),
+    );
   }
 
-   // Helper para mostrar SnackBar de error DENTRO del diálogo si es posible
-   // o en el Scaffold principal si el diálogo ya se cerró.
+  // Helper para mostrar SnackBar de error DENTRO del diálogo si es posible
+  // o en el Scaffold principal si el diálogo ya se cerró.
   void _showErrorSnackBar(BuildContext context, String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(

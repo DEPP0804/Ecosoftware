@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 
-class SistemasCapitalizacion extends StatefulWidget {
-  const SistemasCapitalizacion({super.key});
+class SistemasCapitalizacionPage extends StatefulWidget {
+  const SistemasCapitalizacionPage({super.key});
 
   @override
-  State<SistemasCapitalizacion> createState() => _SistemasCapitalizacionState();
+  State<SistemasCapitalizacionPage> createState() =>
+      _SistemasCapitalizacionPageState();
 }
 
-class _SistemasCapitalizacionState extends State<SistemasCapitalizacion> {
+class _SistemasCapitalizacionPageState
+    extends State<SistemasCapitalizacionPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

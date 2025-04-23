@@ -9,15 +9,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 // --- Fin Importar Firestore ---
 
 // --- Importar Páginas ---
-import 'package:ecosoftware/Views/Pages/NavBar/settings_page.dart';
+import 'package:ecosoftware/Views/Pages/Perfil/settings_page.dart';
 // --- ¡NUEVA IMPORTACIÓN PARA EDITAR PERFIL! ---
-import 'package:ecosoftware/Views/Pages/NavBar/edit_profile_page.dart';
+import 'package:ecosoftware/Views/Pages/Perfil/edit_profile_page.dart';
 // --- FIN IMPORTACIÓN ---
 // Puedes comentar las importaciones de calculadoras si usas rutas nombradas
 // import 'package:ecosoftware/Views/Pages/interes_simple.dart';
 // import 'package:ecosoftware/Views/Pages/interes_compuesto.dart';
 // import 'package:ecosoftware/Views/Pages/anualidades.dart';
 // import 'package:ecosoftware/Views/Pages/amortizacion.dart';
+// import 'package:ecosoftware/Views/Pages/sistemas_capitalizacion.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -282,6 +283,13 @@ class _HomePageState extends State<HomePage> {
           icon: Icons.receipt_long_outlined,
           title: 'Amortización',
           routeName: '/amortizacion',
+        ),
+        _buildCalculatorListTile(
+          context: context,
+          theme: theme,
+          icon: Icons.calculate_outlined,
+          title: 'Sistemas de Capitalización',
+          routeName: '/sistemas_capitalizacion',
         ),
       ],
     );

@@ -2,6 +2,7 @@ import 'package:ecosoftware/Views/Pages/amortizacion.dart';
 import 'package:ecosoftware/Views/Pages/anualidades.dart';
 import 'package:ecosoftware/Views/Pages/interes_compuesto.dart';
 import 'package:ecosoftware/Views/Pages/interes_simple.dart';
+import 'package:ecosoftware/Views/Pages/sistemas_capitalizacion.dart';
 import 'package:ecosoftware/Views/home_page.dart';
 import 'package:ecosoftware/Views/login_view/widget_tree.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -23,11 +24,13 @@ Future<void> main() async {
     // Establece que la sesión del usuario solo dure mientras la app esté activa
     // en la memoria (se cierra al matar el proceso de la app).
     await FirebaseAuth.instance.setPersistence(Persistence.SESSION);
-    print("Persistencia de Firebase Auth establecida en SESSION."); // Mensaje de confirmación (opcional)
+    print(
+      "Persistencia de Firebase Auth establecida en SESSION.",
+    ); // Mensaje de confirmación (opcional)
   } catch (e) {
-     // Es raro que falle, pero es bueno saber si ocurre
-     print("Error al establecer la persistencia de Firebase: $e");
-     // Aquí podrías decidir si continuar o mostrar un error crítico
+    // Es raro que falle, pero es bueno saber si ocurre
+    print("Error al establecer la persistencia de Firebase: $e");
+    // Aquí podrías decidir si continuar o mostrar un error crítico
   }
   // --- FIN: CONFIGURAR PERSISTENCIA DE SESIÓN ---
 
@@ -52,6 +55,7 @@ class MyApp extends StatelessWidget {
         '/interes_compuesto': (context) => InteresCompuestoPage(),
         '/anualidades': (context) => AnualidadesPage(),
         '/amortizacion': (context) => AmortizacionPage(),
+        '/sistemas_capitalizacion': (context) => SistemasCapitalizacionPage(),
         // '/settings': (context) => SettingsPage(), // Añade la ruta a Settings si la usas
       },
     );

@@ -17,6 +17,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 // --- FIN IMPORTACIÓN ---
 // Opcional: para inicialización específica de Firebase
 // import 'firebase_options.dart';
+import 'package:ecosoftware/Views/Pages/loan_simulation_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -59,6 +60,7 @@ class MyApp extends StatelessWidget {
         '/anualidades': (context) => AnualidadesPage(),
         '/amortizacion': (context) => AmortizacionPage(),
         '/sistemas_capitalizacion': (context) => SistemasCapitalizacionPage(),
+         '/simulacion_creditos': (context) => const LoanSimulationPage(),
         '/gradientes': (context) => GradientesPage(),
         '/tasa_interes_retorno': (context) => TasaInteresRetornoPage(),
         '/inflacion':

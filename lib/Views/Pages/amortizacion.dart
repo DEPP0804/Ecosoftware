@@ -324,7 +324,7 @@ class _AmortizacionPageState extends State<AmortizacionPage> {
       builder: (dialogContext) {
         return StatefulBuilder(
           builder: (context, setDialogState) {
-            final theme = Theme.of(dialogContext);
+            //final theme = Theme.of(dialogContext);
 
             // Función de cálculo interna
             void _calcularDialogo() {

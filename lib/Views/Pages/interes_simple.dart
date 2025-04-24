@@ -317,7 +317,6 @@ class _InteresSimplePageState extends State<InteresSimplePage> {
                       DropdownButtonFormField<String>(
                         value: selectedVariable,
                         items: const [
-                          // Hacer const
                           DropdownMenuItem(
                             value: 'I',
                             child: Text('Calcular Interés (I)'),
@@ -337,18 +336,25 @@ class _InteresSimplePageState extends State<InteresSimplePage> {
                         ],
                         onChanged: (String? newValue) {
                           if (newValue != null) {
-                            // Usar setDialogState para actualizar la UI del diálogo
                             setDialogState(() {
                               selectedVariable = newValue;
-                              // Limpiar campos al cambiar para evitar confusiones
-                              _limpiarDialogo();
+
+                              // Limpiar los campos relacionados
+                              principalController.clear();
+                              rateController.clear();
+                              interestController.clear();
+                              timeYearsController.clear();
+                              timeMonthsController.clear();
+                              timeDaysController.clear();
+                              resultController.clear();
                             });
                           }
                         },
                         decoration: const InputDecoration(
                           labelText: 'Calcular Variable',
-                        ), // Tema aplicado
-                        validator: (v) => v == null ? 'Selecciona' : null,
+                        ),
+                        validator:
+                            (v) => v == null ? 'Selecciona una opción' : null,
                       ),
                       const SizedBox(height: kDefaultPadding),
 

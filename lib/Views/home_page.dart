@@ -10,15 +10,17 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 // --- Importar Páginas ---
 import 'package:ecosoftware/Views/Pages/Perfil/settings_page.dart';
-// --- ¡NUEVA IMPORTACIÓN PARA EDITAR PERFIL! ---
 import 'package:ecosoftware/Views/Pages/Perfil/edit_profile_page.dart';
-// --- FIN IMPORTACIÓN ---
-// Puedes comentar las importaciones de calculadoras si usas rutas nombradas
+// --- Importar Página de Pagos --- (Asegúrate que la ruta sea correcta)
+import 'package:ecosoftware/Views/Pages/payments_page.dart';
+
+// --- Importar Páginas de Calculadoras (Si NO usas rutas nombradas, descomenta) ---
 // import 'package:ecosoftware/Views/Pages/interes_simple.dart';
 // import 'package:ecosoftware/Views/Pages/interes_compuesto.dart';
 // import 'package:ecosoftware/Views/Pages/anualidades.dart';
 // import 'package:ecosoftware/Views/Pages/amortizacion.dart';
 // import 'package:ecosoftware/Views/Pages/sistemas_capitalizacion.dart';
+// import 'package:ecosoftware/Views/Pages/loan_simulation_page.dart'; // <-- Necesitarás crear esta página
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -41,8 +43,6 @@ class _HomePageState extends State<HomePage> {
           .collection('users')
           .doc(user!.uid);
       final snapshot = await docRef.get();
-      // No lanzar error si no existe, FutureBuilder lo manejará
-      // if (!snapshot.exists) { throw Exception("Perfil no encontrado."); }
       return snapshot;
     } catch (e) {
       print("Error fetching user profile: $e");
@@ -52,7 +52,6 @@ class _HomePageState extends State<HomePage> {
 
   // Método para cerrar sesión con confirmación
   Future<void> _signOut(BuildContext context) async {
-    /* ... (igual que antes) ... */
     final bool? confirm = await showDialog<bool>(
       context: context,
       barrierDismissible: false,
@@ -86,6 +85,7 @@ class _HomePageState extends State<HomePage> {
     if (confirm == true) {
       try {
         await AuthController().signOut();
+        // No necesitas pop aquí si AuthController maneja el cambio de estado y la UI reacciona.
       } catch (e) {
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
@@ -100,7 +100,6 @@ class _HomePageState extends State<HomePage> {
 
   // --- Widgets de UI (Helpers) ---
   Widget _buildAppBarTitle(BuildContext context) {
-    /* ... (igual que antes) ... */
     final theme = Theme.of(context);
     final textStyle =
         theme.appBarTheme.titleTextStyle ??
@@ -115,7 +114,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildSignOutButton(BuildContext context) {
-    /* ... (igual que antes) ... */
     final theme = Theme.of(context);
     final iconColor =
         theme.appBarTheme.actionsIconTheme?.color ??
@@ -130,7 +128,6 @@ class _HomePageState extends State<HomePage> {
   // --- Contenido para cada Pestaña ---
 
   Widget _buildHomePageBody(BuildContext context) {
-    /* ... (igual que antes, con la Card) ... */
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
     final colorScheme = theme.colorScheme;
@@ -140,20 +137,49 @@ class _HomePageState extends State<HomePage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Bienvenido, ${user?.email?.split('@')[0] ?? 'Invitado'}!',
-            style: textTheme.titleLarge?.copyWith(
-              fontWeight: FontWeight.normal,
+            // Mostrar nombre de Firestore si existe, si no, parte del email
+            'Bienvenido!', // Se muestra el nombre en el perfil, aquí un saludo genérico está bien
+            style: textTheme.headlineMedium?.copyWith( // Un poco más grande
+              fontWeight: FontWeight.w400, // Normal
             ),
           ),
+          const SizedBox(height: kDefaultPadding / 2),
+          // Muestra el nombre del usuario si está disponible, si no el email
+           FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+              future: _fetchUserProfile(),
+              builder: (context, snapshot) {
+                String displayName = user?.email?.split('@')[0] ?? 'Invitado'; // Fallback
+                if (snapshot.connectionState == ConnectionState.done &&
+                    snapshot.hasData &&
+                    snapshot.data!.exists &&
+                    snapshot.data!.data()?['name'] != null &&
+                    snapshot.data!.data()!['name'].isNotEmpty) {
+                  displayName = snapshot.data!.data()!['name'];
+                }
+                // No mostrar nada durante la carga o si hay error aquí,
+                // solo el fallback o el nombre cargado
+                return Text(
+                   displayName,
+                   style: textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.normal,
+                   ),
+                 );
+              }
+            ),
+
           const SizedBox(height: kDefaultPadding * 1.5),
           Card(
+            elevation: 2.0, // Sombra sutil
+            shape: RoundedRectangleBorder( // Bordes redondeados
+              borderRadius: BorderRadius.circular(kDefaultPadding / 2)
+            ),
             child: Padding(
               padding: const EdgeInsets.all(kDefaultPadding),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'CUENTA DE AHORROS',
+                    'CUENTA DE AHORROS', // O el tipo de cuenta principal
                     style: textTheme.labelMedium?.copyWith(
                       color: colorScheme.secondary,
                       letterSpacing: 0.8,
@@ -161,15 +187,16 @@ class _HomePageState extends State<HomePage> {
                   ),
                   const SizedBox(height: kDefaultPadding / 2),
                   Text(
-                    '**** **** **** 1234',
+                    '**** **** **** 1234', // TODO: Obtener número real (ofuscado)
                     style: textTheme.titleMedium?.copyWith(
                       color: colorScheme.onSurface.withOpacity(0.7),
                     ),
                   ),
                   const SizedBox(height: kDefaultPadding),
                   Text('Saldo Disponible', style: textTheme.bodySmall),
+                  // TODO: Obtener saldo real
                   Text(
-                    '\$ 1,234,567.89',
+                    '\$ 1,234,567.89', // Ejemplo
                     style: textTheme.headlineSmall?.copyWith(
                       color: colorScheme.primary,
                       fontWeight: FontWeight.w600,
@@ -191,9 +218,10 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                       onPressed: () {
+                        // TODO: Navegar a la pantalla de detalles de la cuenta
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
-                            content: Text('Navegar a detalles... (TODO)'),
+                            content: Text('Navegar a detalles de cuenta... (TODO)'),
                             duration: Duration(seconds: 1),
                           ),
                         );
@@ -219,7 +247,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildPlaceholderPage(BuildContext context, String title) {
-    /* ... (igual que antes) ... */
     final theme = Theme.of(context);
     return Center(
       child: Column(
@@ -242,7 +269,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildCalculatorsPageBody(BuildContext context) {
-    /* ... (igual que antes) ... */
     final theme = Theme.of(context);
     return ListView(
       padding: const EdgeInsets.all(kDefaultPadding),
@@ -261,36 +287,45 @@ class _HomePageState extends State<HomePage> {
           theme: theme,
           icon: Icons.percent_outlined,
           title: 'Interés Simple',
-          routeName: '/interes_simple',
+          routeName: '/interes_simple', // Asegúrate que esta ruta esté definida
         ),
         _buildCalculatorListTile(
           context: context,
           theme: theme,
           icon: Icons.trending_up_outlined,
           title: 'Interés Compuesto',
-          routeName: '/interes_compuesto',
+           routeName: '/interes_compuesto', // Asegúrate que esta ruta esté definida
         ),
         _buildCalculatorListTile(
           context: context,
           theme: theme,
           icon: Icons.calendar_today_outlined,
           title: 'Anualidades',
-          routeName: '/anualidades',
+           routeName: '/anualidades', // Asegúrate que esta ruta esté definida
         ),
         _buildCalculatorListTile(
           context: context,
           theme: theme,
           icon: Icons.receipt_long_outlined,
           title: 'Amortización',
-          routeName: '/amortizacion',
+          routeName: '/amortizacion', // Asegúrate que esta ruta esté definida
         ),
         _buildCalculatorListTile(
           context: context,
           theme: theme,
           icon: Icons.calculate_outlined,
           title: 'Sistemas de Capitalización',
-          routeName: '/sistemas_capitalizacion',
+          routeName: '/sistemas_capitalizacion', // Asegúrate que esta ruta esté definida
         ),
+        // --- NUEVO BOTÓN AÑADIDO AQUÍ ---
+        _buildCalculatorListTile(
+          context: context,
+          theme: theme,
+          icon: Icons.request_quote_outlined, // Icono sugerido para simulación/cotización
+          title: 'Simulación de Créditos',
+          routeName: '/simulacion_creditos', // Define la ruta para esta nueva sección
+        ),
+        // --- FIN NUEVO BOTÓN ---
       ],
     );
   }
@@ -302,16 +337,21 @@ class _HomePageState extends State<HomePage> {
     required String title,
     required String routeName,
   }) {
-    /* ... (igual que antes) ... */
-    return ListTile(
-      leading: Icon(icon, color: theme.colorScheme.secondary),
-      title: Text(title, style: theme.textTheme.titleMedium),
-      trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-      onTap: () => Navigator.pushNamed(context, routeName),
+    return Card( // Envolver en Card para mejor apariencia
+      margin: const EdgeInsets.only(bottom: kDefaultPadding / 2),
+      child: ListTile(
+        leading: Icon(icon, color: theme.colorScheme.secondary),
+        title: Text(title, style: theme.textTheme.titleMedium),
+        trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+        onTap: () {
+           // Asegúrate que las rutas nombradas estén configuradas en tu MaterialApp
+           Navigator.pushNamed(context, routeName);
+        },
+      ),
     );
   }
 
-  // --- Contenido Pestaña "Perfil" MODIFICADO para navegar a Editar ---
+  // --- Contenido Pestaña "Perfil" ---
   Widget _buildProfilePageBody(BuildContext context) {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
@@ -335,200 +375,212 @@ class _HomePageState extends State<HomePage> {
             ),
           );
         }
-        // Ahora manejar el caso donde el documento no existe explícitamente
         if (!snapshot.hasData ||
             snapshot.data == null ||
             !snapshot.data!.exists) {
-          return Center(
-            child: Padding(
-              padding: const EdgeInsets.all(kDefaultPadding),
-              child: Text(
-                'No se encontró el perfil del usuario en Firestore.',
-                style: textTheme.bodyMedium?.copyWith(
-                  color: Colors.orange[800],
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ),
-          );
+          // Perfil no existe en Firestore, mostrar datos básicos y opción de editar
+          final String name = 'Completa tu perfil';
+          final String email = user?.email ?? 'N/A';
+          final String idType = '--';
+          final String idNumber = 'N/A';
+
+          return _buildProfileContent(context, theme, textTheme, colorScheme, name, email, idType, idNumber, null); // Pasar null para userData
+
         }
 
-        // Datos cargados
-        final userData =
-            snapshot.data!.data(); // Sabemos que existe y tiene data()
-        // Usar ?? para proporcionar valores por defecto si los campos faltan en Firestore
+        // Datos cargados de Firestore
+        final userData = snapshot.data!.data();
         final String name = userData?['name'] ?? 'Actualiza tu nombre';
         final String email = userData?['email'] ?? user?.email ?? 'N/A';
         final String idType = userData?['idType'] ?? '--';
         final String idNumber = userData?['idNumber'] ?? 'Actualiza tu ID';
 
-        return ListView(
-          padding: const EdgeInsets.all(kDefaultPadding),
-          children: [
-            Center(
-              child: CircleAvatar(
-                radius: 45,
-                backgroundColor:
-                    colorScheme.primaryContainer ??
-                    colorScheme.primary.withOpacity(0.1),
-                child: Text(
-                  name.isNotEmpty && name != 'Actualiza tu nombre'
-                      ? name[0].toUpperCase()
-                      : 'U',
-                  style: textTheme.displaySmall?.copyWith(
-                    color: colorScheme.primary,
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: kDefaultPadding),
-            Center(child: Text(name, style: textTheme.headlineSmall)),
-            const SizedBox(height: kDefaultPadding / 2),
-            Center(child: Text(email, style: textTheme.bodyMedium)),
-            const SizedBox(height: kDefaultPadding / 2),
-            Center(
-              child: Text('$idType $idNumber', style: textTheme.bodyMedium),
-            ),
-            const SizedBox(height: kDefaultPadding * 1.5),
-
-            // --- Botón Editar Perfil (CON NAVEGACIÓN ACTIVADA) ---
-            Center(
-              child: ElevatedButton.icon(
-                icon: const Icon(Icons.edit_outlined, size: 18),
-                label: const Text('Editar Perfil'),
-                onPressed: () {
-                  // --- NAVEGACIÓN A EditProfilePage ---
-                  if (userData != null) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder:
-                            (context) => EditProfilePage(userData: userData),
-                      ),
-                    ).then((_) {
-                      // Refrescar datos al volver
-                      if (mounted) {
-                        setState(() {});
-                      }
-                    });
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text(
-                          'Error: No se pudieron cargar los datos para editar.',
-                        ),
-                        duration: Duration(seconds: 2),
-                      ),
-                    );
-                  }
-                  // --- FIN NAVEGACIÓN ---
-                },
-                style: ElevatedButton.styleFrom(
-                  minimumSize: Size.zero,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: kDefaultPadding * 1.5,
-                    vertical: kDefaultPadding / 2,
-                  ),
-                  textStyle: textTheme.labelMedium,
-                ),
-              ),
-            ),
-            Divider(
-              height: kDefaultPadding * 2.5,
-              thickness: 1,
-              color: theme.dividerTheme.color,
-            ),
-
-            // --- Sección Configuración ---
-            Text(
-              'Configuración',
-              style: textTheme.titleMedium?.copyWith(
-                color: colorScheme.secondary,
-              ),
-            ),
-            const SizedBox(height: kDefaultPadding / 2),
-            ListTile(
-              leading: Icon(
-                Icons.security_outlined,
-                color: colorScheme.primary,
-              ),
-              title: Text(
-                'Seguridad y Biometría',
-                style: textTheme.titleMedium,
-              ),
-              trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const SettingsPage()),
-                );
-              },
-            ),
-            Divider(
-              indent: 50,
-              endIndent: 10,
-              color: theme.dividerTheme.color?.withOpacity(0.5),
-            ),
-            ListTile(
-              leading: Icon(
-                Icons.notifications_outlined,
-                color: colorScheme.primary,
-              ),
-              title: Text('Notificaciones', style: textTheme.titleMedium),
-              trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-              onTap: () {
-                /* TODO */
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.help_outline, color: colorScheme.primary),
-              title: Text('Ayuda y Soporte', style: textTheme.titleMedium),
-              trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-              onTap: () {
-                /* TODO */
-              },
-            ),
-          ],
-        );
+        return _buildProfileContent(context, theme, textTheme, colorScheme, name, email, idType, idNumber, userData);
       },
     );
   }
-  // --- FIN MÉTODO MODIFICADO ---
+
+  // Helper widget para construir el contenido del perfil (evita repetición)
+  Widget _buildProfileContent(
+      BuildContext context,
+      ThemeData theme,
+      TextTheme textTheme,
+      ColorScheme colorScheme,
+      String name,
+      String email,
+      String idType,
+      String idNumber,
+      Map<String, dynamic>? userData // Hacer userData opcional
+   ) {
+     return ListView(
+        padding: const EdgeInsets.all(kDefaultPadding),
+        children: [
+          Center(
+            child: CircleAvatar(
+              radius: 45,
+              backgroundColor:
+                  colorScheme.primaryContainer ??
+                  colorScheme.primary.withOpacity(0.1),
+              child: Text(
+                // Mostrar inicial o '?' si no hay nombre o es el placeholder
+                 (name.isNotEmpty && name != 'Actualiza tu nombre' && name != 'Completa tu perfil')
+                    ? name[0].toUpperCase()
+                    : '?',
+                style: textTheme.displaySmall?.copyWith(
+                  color: colorScheme.primary,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: kDefaultPadding),
+          Center(child: Text(name, style: textTheme.headlineSmall)),
+          const SizedBox(height: kDefaultPadding / 2),
+          Center(child: Text(email, style: textTheme.bodyMedium)),
+          const SizedBox(height: kDefaultPadding / 2),
+           if (idNumber != 'N/A' && idNumber != 'Actualiza tu ID') // Solo mostrar si hay ID
+             Center(
+               child: Text('$idType $idNumber', style: textTheme.bodyMedium),
+             ),
+          const SizedBox(height: kDefaultPadding * 1.5),
+
+          // --- Botón Editar Perfil ---
+          Center(
+            child: ElevatedButton.icon(
+              icon: const Icon(Icons.edit_outlined, size: 18),
+              label: Text(userData != null ? 'Editar Perfil' : 'Completar Perfil'), // Cambiar texto si no hay datos
+              onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      // Pasa los datos existentes (incluso si son nulos/vacíos) a EditProfilePage
+                      // EditProfilePage deberá manejar el caso donde userData es null o incompleto.
+                      builder: (context) => EditProfilePage(userData: userData ?? {}), // Pasa un mapa vacío si es null
+                    ),
+                  ).then((_) {
+                    // Refrescar datos al volver
+                    if (mounted) {
+                      setState(() {});
+                    }
+                  });
+              },
+              style: ElevatedButton.styleFrom(
+                minimumSize: Size.zero, // Ajustar tamaño
+                padding: const EdgeInsets.symmetric(
+                  horizontal: kDefaultPadding * 1.5,
+                  vertical: kDefaultPadding / 2,
+                ),
+                textStyle: textTheme.labelMedium,
+              ),
+            ),
+          ),
+          Divider(
+            height: kDefaultPadding * 2.5,
+            thickness: 1,
+            color: theme.dividerTheme.color,
+          ),
+
+          // --- Sección Configuración ---
+          Text(
+            'Configuración',
+            style: textTheme.titleMedium?.copyWith(
+              color: colorScheme.secondary,
+            ),
+          ),
+          const SizedBox(height: kDefaultPadding / 2),
+          ListTile(
+            leading: Icon(
+              Icons.security_outlined,
+              color: colorScheme.primary,
+            ),
+            title: Text(
+              'Seguridad y Biometría',
+              style: textTheme.titleMedium,
+            ),
+            trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const SettingsPage()),
+              );
+            },
+          ),
+          Divider( // Separador sutil
+            indent: 50, // Indentación para que empiece después del icono
+            endIndent: 10,
+            color: theme.dividerTheme.color?.withOpacity(0.5),
+          ),
+          ListTile(
+            leading: Icon(
+              Icons.notifications_outlined,
+              color: colorScheme.primary,
+            ),
+            title: Text('Notificaciones', style: textTheme.titleMedium),
+            trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+            onTap: () {
+              // TODO: Navegar a la pantalla de configuración de notificaciones
+               ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Configuración Notificaciones (TODO)')),
+                );
+            },
+          ),
+           ListTile(
+            leading: Icon(Icons.help_outline, color: colorScheme.primary),
+            title: Text('Ayuda y Soporte', style: textTheme.titleMedium),
+            trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+            onTap: () {
+              // TODO: Navegar a la pantalla de ayuda/FAQ/contacto
+               ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Ayuda y Soporte (TODO)')),
+                );
+            },
+          ),
+        ],
+      );
+  }
+
 
   // --- Método Build Principal ---
   @override
   Widget build(BuildContext context) {
-    /* ... (igual que antes) ... */
     final theme = Theme.of(context);
+    // --- Definición de las páginas para el IndexedStack ---
     final List<Widget> pageOptions = <Widget>[
       _buildHomePageBody(context),
-      _buildPlaceholderPage(context, 'Transferencias'),
-      _buildPlaceholderPage(context, 'Pagos'),
-      _buildCalculatorsPageBody(context),
-      _buildProfilePageBody(context),
-    ]; // Se usa el método modificado
+      _buildPlaceholderPage(context, 'Transferencias'), // Placeholder para Transferencias
+      const PaymentsPage(),                          // Página de Pagos real
+      _buildCalculatorsPageBody(context),            // Página de Calculadoras real
+      _buildProfilePageBody(context),               // Página de Perfil real
+    ];
+
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
         title: _buildAppBarTitle(context),
         centerTitle: true,
-        automaticallyImplyLeading: false,
+        automaticallyImplyLeading: false, // No mostrar botón de regreso en AppBar
         actions: <Widget>[
           _buildSignOutButton(context),
-          const SizedBox(width: kDefaultPadding / 2),
+          const SizedBox(width: kDefaultPadding / 2), // Pequeño espacio
         ],
+        // elevation: 0, // Opcional: quitar sombra del AppBar
+        // backgroundColor: theme.primaryColor, // Opcional: definir color explícito
       ),
-      body: IndexedStack(index: _selectedIndex, children: pageOptions),
+      // Usar IndexedStack para mantener el estado de cada página al cambiar de pestaña
+      body: IndexedStack(
+          index: _selectedIndex,
+          children: pageOptions
+      ),
       bottomNavigationBar: BottomNavigationBar(
+        // --- Configuración de la Barra de Navegación Inferior ---
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home_outlined),
-            activeIcon: Icon(Icons.home),
+            activeIcon: Icon(Icons.home), // Icono cuando está activa
             label: 'Inicio',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.swap_horiz_outlined),
-            activeIcon: Icon(Icons.swap_horiz),
+             activeIcon: Icon(Icons.swap_horiz),
             label: 'Transferir',
           ),
           BottomNavigationBarItem(
@@ -538,21 +590,29 @@ class _HomePageState extends State<HomePage> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.calculate_outlined),
-            activeIcon: Icon(Icons.calculate),
+             activeIcon: Icon(Icons.calculate),
             label: 'Calculos',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person_outline),
-            activeIcon: Icon(Icons.person),
+             activeIcon: Icon(Icons.person),
             label: 'Perfil',
           ),
         ],
-        currentIndex: _selectedIndex,
-        onTap: (int index) {
+        currentIndex: _selectedIndex, // Índice de la pestaña actual
+        onTap: (int index) {         // Callback cuando se toca una pestaña
           setState(() {
-            _selectedIndex = index;
+            _selectedIndex = index;   // Actualizar el índice seleccionado
           });
         },
+        // --- Estilos de la Barra de Navegación ---
+        type: BottomNavigationBarType.fixed, // Para que todos los labels se vean
+        selectedItemColor: theme.colorScheme.primary, // Color del ítem activo
+        unselectedItemColor: theme.colorScheme.onSurface.withOpacity(0.6), // Color de ítems inactivos
+        // selectedFontSize: 12, // Tamaño de fuente del label activo (opcional)
+        // unselectedFontSize: 12, // Tamaño de fuente del label inactivo (opcional)
+        // showUnselectedLabels: true, // Asegurarse que los labels inactivos se vean
+        // backgroundColor: theme.colorScheme.surface, // Color de fondo (opcional)
       ),
     );
   }

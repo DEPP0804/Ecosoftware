@@ -354,7 +354,7 @@ class _SistemasCapitalizacionPageState
                       if (selectedSystem == 'Seguro' &&
                           selectedVariable != 'Cs')
                         TextFormField(
-                          controller: alphaController,
+                          controller: costoSeguroController,
                           decoration: const InputDecoration(
                             labelText: 'Costo del Seguro (Cs)',
                           ),
@@ -438,7 +438,6 @@ class _SistemasCapitalizacionPageState
                         resultado = (A * pow(1 + i, n)) - Cs;
                       }
                     }
-
                     setDialogState(() {
                       resultadoController.text = resultado.toStringAsFixed(2);
                     });

@@ -1,8 +1,11 @@
 import 'package:ecosoftware/Views/Pages/amortizacion.dart';
 import 'package:ecosoftware/Views/Pages/anualidades.dart';
+import 'package:ecosoftware/Views/Pages/gradientes.dart';
+import 'package:ecosoftware/Views/Pages/inflacion.dart';
 import 'package:ecosoftware/Views/Pages/interes_compuesto.dart';
 import 'package:ecosoftware/Views/Pages/interes_simple.dart';
 import 'package:ecosoftware/Views/Pages/sistemas_capitalizacion.dart';
+import 'package:ecosoftware/Views/Pages/tasa_interes_retorno.dart';
 import 'package:ecosoftware/Views/home_page.dart';
 import 'package:ecosoftware/Views/login_view/widget_tree.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -14,6 +17,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 // --- FIN IMPORTACIÓN ---
 // Opcional: para inicialización específica de Firebase
 // import 'firebase_options.dart';
+import 'package:ecosoftware/Views/Pages/loan_simulation_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -56,6 +60,12 @@ class MyApp extends StatelessWidget {
         '/anualidades': (context) => AnualidadesPage(),
         '/amortizacion': (context) => AmortizacionPage(),
         '/sistemas_capitalizacion': (context) => SistemasCapitalizacionPage(),
+         '/simulacion_creditos': (context) => const LoanSimulationPage(),
+        '/gradientes': (context) => GradientesPage(),
+        '/tasa_interes_retorno': (context) => TasaInteresRetornoPage(),
+        '/inflacion':
+            (context) =>
+                InflacionPage(), // Añade la ruta a Inflacion si la usas
         // '/settings': (context) => SettingsPage(), // Añade la ruta a Settings si la usas
       },
     );

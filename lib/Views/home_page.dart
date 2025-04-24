@@ -19,6 +19,9 @@ import 'package:ecosoftware/Views/Pages/Perfil/edit_profile_page.dart';
 // import 'package:ecosoftware/Views/Pages/anualidades.dart';
 // import 'package:ecosoftware/Views/Pages/amortizacion.dart';
 // import 'package:ecosoftware/Views/Pages/sistemas_capitalizacion.dart';
+// import 'package:ecosoftware/Views/Pages/gradientes.dart';
+// import 'package:ecosoftware/Views/Pages/inflacion.dart'; // Si usas InflacionPage
+// import 'package:ecosoftware/Views/Pages/tasa_interes_retorno.dart'; // Si usas TasaInteresRetornoPage
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -290,6 +293,27 @@ class _HomePageState extends State<HomePage> {
           icon: Icons.calculate_outlined,
           title: 'Sistemas de Capitalización',
           routeName: '/sistemas_capitalizacion',
+        ),
+        _buildCalculatorListTile(
+          context: context,
+          theme: theme,
+          icon: Icons.ssid_chart_outlined,
+          title: 'Tasa de Interés y Retorno',
+          routeName: '/tasa_interes_retorno',
+        ),
+        _buildCalculatorListTile(
+          context: context,
+          theme: theme,
+          icon: Icons.arrow_upward_outlined,
+          title: 'Inflación',
+          routeName: '/inflacion',
+        ),
+        _buildCalculatorListTile(
+          context: context,
+          theme: theme,
+          icon: Icons.gradient_outlined,
+          title: 'Gradientes',
+          routeName: '/gradientes',
         ),
       ],
     );
